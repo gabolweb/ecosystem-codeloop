@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CodeLoop Ecosystem — Mainland OS for Global Work</title>
+  <meta name="description" content="CodeLoop Ecosystem — Mainland, a complete operating system for dynamic remote careers and partner‑led innovation. Invitation‑only." />
+  <meta name="theme-color" content="#0b0b0c" />
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#FFF4E6',
+              100: '#FFE6C2',
+              200: '#FFD099',
+              300: '#FFB467',
+              400: '#FF8F2A',
+              500: '#FF6A00',
+              600: '#E85F00',
+              700: '#C94F00',
+              800: '#9A3C00',
+              900: '#7A2F00',
+            },
+            base: {
+              900: '#0b0b0c',
+              800: '#121315',
+              700: '#17181b',
+              600: '#1D1F23',
+              500: '#22252B',
+              400: '#2A2E36',
+            }
+          },
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "Segoe UI", "Roboto", "Apple Color Emoji", "Segoe UI Emoji"],
+          },
+          boxShadow: {
+            glow: '0 0 0 1px rgba(255,106,0,.25), 0 10px 40px rgba(255,106,0,.14)'
+          },
+          keyframes: {
+            fadeUp: { '0%': { opacity: 0, transform: 'translateY(12px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            fade: { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+          },
+          animation: {
+            fadeUp: 'fadeUp .8s cubic-bezier(.22,1,.36,1) both',
+            fade: 'fade 1.2s ease both'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Inter + Material Symbols for a Google‑style aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Material+Symbols+Rounded:FILL@0..1&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --radius: 16px; /* shadcn‑like */
+      --ring: 0 0 0 2px rgba(255,106,0,.35);
+    }
+    .msr { font-family: 'Material Symbols Rounded'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .card { 
+      border-radius: var(--radius); 
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); 
+      border: 1px solid rgba(255,255,255,.06);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,106,0,.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,.3), 0 0 0 1px rgba(255,106,0,.1);
+    }
+    .ring-focus:focus-visible { outline: none; box-shadow: var(--ring); }
+    .noise { position: absolute; inset: -1px; background-image: url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1600&auto=format&fit=crop'); mix-blend-mode: soft-light; opacity:.045; pointer-events:none; filter: grayscale(100%); }
+    .reveal { opacity: 0; transform: translateY(14px); }
+    .reveal.in { opacity: 1; transform: translateY(0); transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+    .grid-auto-fit { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    
+    /* Animações modernas aprimoradas */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out both;
+    }
+    
+    .animate-slide-in-left {
+      animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    
+    .animate-slide-in-right {
+      animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    
+    /* Melhorias tipográficas */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      background: linear-gradient(135deg, #ffffff 0%, #ffffff 40%, rgba(255,255,255,0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    h2 {
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      color: #ffffff;
+    }
+    
+    /* CTAs melhorados */
+    .cta-primary {
+      background: linear-gradient(135deg, #FF6A00 0%, #E85F00 100%);
+      box-shadow: 0 4px 20px rgba(255,106,0,0.4), 0 0 0 1px rgba(255,106,0,0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      letter-spacing: 0.025em;
+    }
+    
+    .cta-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px rgba(255,106,0,0.5), 0 0 0 1px rgba(255,106,0,0.3);
+      background: linear-gradient(135deg, #FF8F2A 0%, #FF6A00 100%);
+    }
+    
+    .cta-secondary {
+      backdrop-filter: blur(12px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+    }
+    
+    .cta-secondary:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,106,0,0.3);
+      transform: translateY(-1px);
+    }
+    
+    /* Menu navigation melhorado */
+    nav a {
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+      letter-spacing: 0.025em;
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #FF6A00, #FF8F2A);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    nav a:hover {
+      color: #FF6A00;
+      transform: translateY(-1px);
+    }
+    
+    /* Efeitos de imagem */
+    img {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    img:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1) contrast(1.05);
+    }
+    
+    /* Badges e tags melhorados */
+    .badge {
+      background: linear-gradient(135deg, rgba(255,106,0,0.15) 0%, rgba(255,106,0,0.05) 100%);
+      border: 1px solid rgba(255,106,0,0.2);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .badge:hover {
+      background: linear-gradient(135deg, rgba(255,106,0,0.25) 0%, rgba(255,106,0,0.1) 100%);
+      border-color: rgba(255,106,0,0.4);
+      transform: translateY(-1px);
+    }
+    
+    /* Estatísticas melhoradas */
+    .stat-number {
+      font-weight: 800;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      background: linear-gradient(135deg, #ffffff 0%, #FF6A00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Partner chips melhorados */
+    .partner-chip {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+    }
+    
+    .partner-chip:hover {
+      background: rgba(255,106,0,0.1);
+      border-color: rgba(255,106,0,0.3);
+      transform: translateY(-1px);
+    }
+    
+    /* Layout dinâmico do hero com composição sofisticada */
+    .hero-gallery {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 0.75rem;
+      height: 500px;
+      perspective: 1000px;
+    }
+    
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    
+    .hero-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,106,0,0.1) 0%, transparent 50%, rgba(255,106,0,0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+    
+    .hero-image:hover::before {
+      opacity: 1;
+    }
+    
+    .hero-image:hover {
+      transform: translateY(-8px) rotateX(5deg) rotateY(2deg);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,106,0,0.2);
+    }
+    
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .hero-image:hover img {
+      transform: scale(1.05);
+      filter: brightness(1.1) contrast(1.1) saturate(1.2);
+    }
+    
+    /* Posicionamento específico para cada imagem */
+    .hero-image-1 {
+      grid-column: 1 / 5;
+      grid-row: 1 / 4;
+      z-index: 5;
+      animation-delay: 0.1s;
+    }
+    
+    .hero-image-2 {
+      grid-column: 5 / 8;
+      grid-row: 1 / 3;
+      z-index: 4;
+      animation-delay: 0.2s;
+    }
+    
+    .hero-image-3 {
+      grid-column: 8 / 13;
+      grid-row: 1 / 5;
+      z-index: 6;
+      animation-delay: 0.3s;
+    }
+    
+    .hero-image-4 {
+      grid-column: 1 / 4;
+      grid-row: 4 / 7;
+      z-index: 3;
+      animation-delay: 0.4s;
+    }
+    
+    .hero-image-5 {
+      grid-column: 4 / 9;
+      grid-row: 3 / 6;
+      z-index: 7;
+      animation-delay: 0.5s;
+    }
+    
+    .hero-image-6 {
+      grid-column: 9 / 12;
+      grid-row: 5 / 8;
+      z-index: 2;
+      animation-delay: 0.6s;
+    }
+    
+    .hero-image-7 {
+      grid-column: 1 / 6;
+      grid-row: 7 / 9;
+      z-index: 1;
+      animation-delay: 0.7s;
+    }
+    
+    /* Elementos de destaque */
+    .hero-image-featured {
+      position: relative;
+    }
+    
+    .hero-image-featured::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(45deg, #FF6A00, #FF8F2A, #FFB366, #FF6A00);
+      background-size: 300% 300%;
+      border-radius: 22px;
+      z-index: -1;
+      animation: gradientShift 3s ease-in-out infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    /* Efeitos de profundidade com sombras dinâmicas */
+    .depth-layer-1 {
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+    }
+    
+    .depth-layer-2 {
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.15));
+    }
+    
+    .depth-layer-3 {
+      filter: drop-shadow(0 16px 32px rgba(0,0,0,0.1));
+    }
+    
+    /* Animação de entrada fluida */
+    @keyframes heroImageReveal {
+      from {
+        opacity: 0;
+        transform: translateY(40px) rotateX(15deg);
+        filter: blur(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+    
+    .hero-image {
+      animation: heroImageReveal 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    
+    /* Responsividade para mobile */
+    @media (max-width: 768px) {
+      .hero-gallery {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+        height: 600px;
+      }
+      
+      .hero-image-1 {
+        grid-column: 1 / 4;
+        grid-row: 1 / 4;
+      }
+      
+      .hero-image-2 {
+        grid-column: 4 / 7;
+        grid-row: 1 / 3;
+      }
+      
+      .hero-image-3 {
+        grid-column: 1 / 7;
+        grid-row: 4 / 7;
+      }
+      
+      .hero-image-4 {
+        grid-column: 1 / 3;
+        grid-row: 7 / 9;
+      }
+      
+      .hero-image-5 {
+        grid-column: 3 / 6;
+        grid-row: 7 / 10;
+      }
+      
+      .hero-image-6 {
+        grid-column: 6 / 7;
+        grid-row: 7 / 10;
+      }
+      
+      .hero-image-7 {
+        grid-column: 1 / 7;
+        grid-row: 10 / 13;
+      }
+    }
+    
+    /* Animação de entrada escalonada */
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    .stagger-6 { animation-delay: 0.6s; }
+  </style>
+</head>
+
+<body class="bg-base-900 text-white font-sans antialiased selection:bg-brand-500/30">
+  <!-- NAV -->
+  <header id="nav" class="fixed inset-x-0 top-0 z-50 transition-all">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-base-800/70 p-3 backdrop-blur">
+        <a href="#top" class="flex items-center gap-2 font-semibold tracking-tight">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-brand-500 text-base-900 shadow-glow">CE</span>
+          <span class="hidden sm:block">CodeLoop Ecosystem</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6 text-sm text-white/80 animate-fade-in">
+          <a href="#mainland" class="hover:text-white">Mainland OS</a>
+          <a href="#paths" class="hover:text-white">Paths</a>
+          <a href="#companions" class="hover:text-white">Companions</a>
+          <a href="#remotica" class="hover:text-white">Remotica</a>
+          <a href="#bastion" class="hover:text-white">Bastion</a>
+          <a href="#districts" class="hover:text-white">Districts</a>
+          <a href="#faq" class="hover:text-white">FAQ</a>
+        </nav>
+        <button disabled class="ring-focus flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white/80 outline-none transition disabled:cursor-not-allowed disabled:opacity-60 cta-secondary" aria-describedby="invite-note">
+          <span class="msr">lock</span> Join Ecosystem
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="relative">
+    <!-- HERO -->
+    <section class="relative isolate overflow-hidden pt-36">
+      <div class="absolute inset-0 -z-10">
+        <div class="absolute left-1/2 top-[-15%] h-[44rem] w-[44rem] -translate-x-1/2 rounded-full bg-brand-500/10 blur-3xl"></div>
+        <div class="absolute right-[-10%] bottom-[-20%] h-[36rem] w-[36rem] rounded-full bg-brand-500/5 blur-3xl"></div>
+        <div class="noise"></div>
+      </div>
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div class="space-y-6 reveal animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur">
+              <span class="msr text-base">verified</span> Invitation‑Only by CodeLoop.co
+            </div>
+            <h1 class="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+              Mainland
+              <span class="block bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">The Operating System for Global Work</span>
+            </h1>
+            <p class="max-w-xl text-white/70">A dynamic remote career and partner innovation ecosystem that connects enterprise needs with interdisciplinary teams through augmented intelligence—bridging global experts and technology partners toward high‑impact outcomes.</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <button disabled class="ring-focus inline-flex items-center gap-2 rounded-2xl bg-brand-500/20 px-5 py-3 text-sm font-semibold text-brand-100 shadow-glow transition disabled:cursor-not-allowed disabled:opacity-70 cta-primary">
+                <span class="msr">lock</span> Request Invite (Closed)
+              </button>
+              <a href="#paths" class="ring-focus inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm text-white/80 transition hover:bg-white/10 cta-secondary">
+                <span class="msr">arrow_downward</span> Explore Paths
+              </a>
+            </div>
+            <p id="invite-note" class="text-xs text-white/50">Access is restricted. Invitations are issued to select partners and remote leaders.</p>
+          </div>
+          <div class="relative reveal animate-slide-in-right">
+            <div class="hero-gallery">
+              <div class="hero-image hero-image-1 hero-image-featured depth-layer-1">
+                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop" alt="High‑tech workspace" />
+              </div>
+              <div class="hero-image hero-image-2 depth-layer-2">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?q=80&w=1200&auto=format&fit=crop" alt="Distributed team" />
+              </div>
+              <div class="hero-image hero-image-3 hero-image-featured depth-layer-1">
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop" alt="Collaboration" />
+              </div>
+              <div class="hero-image hero-image-4 depth-layer-3">
+                <img src="https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop" alt="Neural networks" />
+              </div>
+              <div class="hero-image hero-image-5 hero-image-featured depth-layer-1">
+                <img src="https://images.unsplash.com/photo-1526498460520-4c246339dccb?q=80&w=1200&auto=format&fit=crop" alt="AR/VR prototyping" />
+              </div>
+              <div class="hero-image hero-image-6 depth-layer-2">
+                <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop" alt="Blockchain nodes" />
+              </div>
+              <div class="hero-image hero-image-7 depth-layer-3">
+                <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1200&auto=format&fit=crop" alt="Innovation hub" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mx-auto mt-16 max-w-7xl px-6">
+        <div class="grid grid-cols-2 items-center gap-4 rounded-2xl border border-white/10 bg-base-800/60 p-4 backdrop-blur sm:grid-cols-4 lg:grid-cols-6 reveal animate-fade-in">
+          <div class="text-center animate-fade-in-up stagger-1"><div class="text-2xl font-bold stat-number">20+</div><div class="text-xs text-white/60">Partner Tracks</div></div>
+          <div class="text-center animate-fade-in-up stagger-2"><div class="text-2xl font-bold stat-number">1000+</div><div class="text-xs text-white/60">Remote Contributors</div></div>
+          <div class="text-center animate-fade-in-up stagger-3"><div class="text-2xl font-bold stat-number">50+</div><div class="text-xs text-white/60">Countries</div></div>
+          <div class="text-center animate-fade-in-up stagger-4"><div class="text-2xl font-bold stat-number">∞</div><div class="text-xs text-white/60">Network Effects</div></div>
+          <div class="text-center animate-fade-in-up stagger-5"><div class="text-2xl font-bold stat-number">8</div><div class="text-xs text-white/60">Core Engines</div></div>
+          <div class="text-center animate-fade-in-up stagger-6"><div class="text-2xl font-bold stat-number">24+</div><div class="text-xs text-white/60">Districts</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAINLAND OS / PARTNERS -->
+    <section id="mainland" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mb-12 max-w-2xl reveal animate-fade-in-up">
+          <h2 class="text-3xl font-bold tracking-tight">Mainland OS</h2>
+          <p class="mt-3 text-white/70">A unified operating system aligning partner demand and remote talent supply through augmented intelligence. We orchestrate teams, competencies, governance, and delivery across time zones with design‑level precision.</p>
+        </div>
+
+        <div id="paths" class="grid gap-6 md:grid-cols-2">
+          <article class="card p-6 reveal animate-slide-in-left">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-500/15 px-3 py-1 text-xs text-brand-200 badge"><span class="msr">handshake</span> Be a Partner</div>
+            <h3 class="text-lg font-semibold">Build with Dynamic Teams</h3>
+            <p class="mt-2 text-sm text-white/70">For enterprises and studios seeking velocity. Spin up interdisciplinary squads, governed by clear OKRs, to deliver high‑impact R&amp;D and production work.</p>
+            <ul class="mt-4 list-disc space-y-1 pl-5 text-sm text-white/70">
+              <li>Interdisciplinary squads on demand</li>
+              <li>Playbooks, governance, and observability</li>
+              <li>Access to frontier tech partners</li>
+            </ul>
+            <div class="mt-5 flex items-center gap-3">
+              <button disabled class="ring-focus inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-sm text-white/80 disabled:cursor-not-allowed disabled:opacity-60"><span class="msr">lock</span> Partner Access</button>
+              <span class="text-xs text-white/50">Invite‑only</span>
+            </div>
+          </article>
+
+          <article class="card p-6 reveal animate-slide-in-right">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-500/15 px-3 py-1 text-xs text-brand-200 badge"><span class="msr">work</span> Be a Looper</div>
+            <h3 class="text-lg font-semibold">Grow a Global Remote Career</h3>
+            <p class="mt-2 text-sm text-white/70">For remote professionals pursuing a dynamic, cross‑border path. Build competencies, ship outcomes, and join squads that match your specialization.</p>
+            <ul class="mt-4 list-disc space-y-1 pl-5 text-sm text-white/70">
+              <li>Competency maps &amp; mentorship</li>
+              <li>Real projects with measurable outcomes</li>
+              <li>Global network &amp; permanent learning</li>
+            </ul>
+            <div class="mt-5 flex items-center gap-3">
+              <button disabled class="ring-focus inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-sm text-white/80 disabled:cursor-not-allowed disabled:opacity-60"><span class="msr">lock</span> Looper Access</button>
+              <span class="text-xs text-white/50">Invite‑only</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Tech partners as text chips (replace with logos if desired) -->
+        <div class="mt-10 flex flex-wrap items-center gap-2 reveal animate-fade-in">
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 partner-chip">Google</span>
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 partner-chip">NVIDIA</span>
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 partner-chip">Autodesk</span>
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 partner-chip">Figma</span>
+          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 partner-chip">and more</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPANIONS: Trae / Aria / Nova -->
+    <section id="companions" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mb-12 max-w-2xl animate-fade-in-up">
+          <h2 class="text-3xl font-bold tracking-tight">Companions</h2>
+          <p class="mt-3 text-lg leading-relaxed text-white/70">Specialized AI agents that augment human capabilities across the ecosystem, providing intelligent assistance for complex workflows and decision-making.</p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-3">
+          <article class="card p-6 animate-fade-in-up stagger-1">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-500/15 px-3 py-1 text-xs text-brand-200 badge">
+              <span class="msr">psychology</span> AI Agent
+            </div>
+            <h3 class="text-lg font-semibold">Trae</h3>
+            <p class="mt-2 text-sm text-white/70">Advanced coding companion that understands context, suggests optimizations, and helps maintain code quality across projects.</p>
+            <div class="mt-4 flex items-center gap-2">
+              <span class="rounded-full bg-green-500/20 px-2 py-1 text-xs text-green-300 badge">Active</span>
+              <span class="text-xs text-white/50">Code Intelligence</span>
+            </div>
+          </article>
+
+          <article class="card p-6 animate-fade-in-up stagger-2">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-500/15 px-3 py-1 text-xs text-brand-200 badge">
+              <span class="msr">design_services</span> AI Agent
+            </div>
+            <h3 class="text-lg font-semibold">Aria</h3>
+            <p class="mt-2 text-sm text-white/70">Creative design assistant that generates concepts, refines visual elements, and maintains brand consistency across projects.</p>
+            <div class="mt-4 flex items-center gap-2">
+              <span class="rounded-full bg-blue-500/20 px-2 py-1 text-xs text-blue-300 badge">Beta</span>
+              <span class="text-xs text-white/50">Design Intelligence</span>
+            </div>
+          </article>
+
+          <article class="card p-6 animate-fade-in-up stagger-3">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-lg bg-brand-500/15 px-3 py-1 text-xs text-brand-200 badge">
+              <span class="msr">analytics</span> AI Agent
+            </div>
+            <h3 class="text-lg font-semibold">Nova</h3>
+            <p class="mt-2 text-sm text-white/70">Strategic analysis companion that processes market data, identifies opportunities, and provides actionable insights for decision-making.</p>
+            <div class="mt-4 flex items-center gap-2">
+              <span class="rounded-full bg-purple-500/20 px-2 py-1 text-xs text-purple-300 badge">Coming Soon</span>
+              <span class="text-xs text-white/50">Strategic Intelligence</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- REMOTICA -->
+    <section id="remotica" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div class="space-y-6 animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur badge">
+              <span class="msr text-base">location_on</span> Remote‑First
+            </div>
+            <h2 class="text-3xl font-bold tracking-tight">Remotica</h2>
+            <p class="text-lg leading-relaxed text-white/70">A comprehensive remote work platform that connects global talent with opportunities, providing tools for collaboration, project management, and career development in a distributed work environment.</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="#" class="ring-focus inline-flex items-center gap-2 rounded-2xl bg-brand-500/20 px-5 py-3 text-sm font-semibold text-brand-100 shadow-glow transition hover:bg-brand-500/30 cta-primary">
+                <span class="msr">launch</span> Explore Platform
+              </a>
+              <a href="#" class="ring-focus inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm text-white/80 transition hover:bg-white/10 cta-secondary">
+                <span class="msr">info</span> Learn More
+              </a>
+            </div>
+          </div>
+          <div class="relative animate-slide-in-right">
+            <div class="grid grid-cols-2 gap-4">
+              <img class="card aspect-square object-cover" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop" alt="Remote collaboration" />
+              <img class="card aspect-square object-cover" src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop" alt="Digital workspace" />
+              <img class="card aspect-square object-cover" src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Remote team meeting" />
+              <img class="card aspect-square object-cover" src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=800&auto=format&fit=crop" alt="Home office setup" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BASTION -->
+    <section id="bastion" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div class="relative animate-slide-in-left">
+            <div class="grid grid-cols-2 gap-4">
+              <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1200&auto=format&fit=crop" alt="Security infrastructure" />
+              <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="Data protection" />
+              <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=1200&auto=format&fit=crop" alt="Network security" />
+              <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop" alt="Secure workspace" />
+            </div>
+          </div>
+          <div class="space-y-6 animate-fade-in-up">
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur badge">
+              <span class="msr text-base">security</span> Enterprise Security
+            </div>
+            <h2 class="text-3xl font-bold tracking-tight">Bastion</h2>
+            <p class="text-lg leading-relaxed text-white/70">Enterprise-grade security infrastructure that protects distributed teams and sensitive data across global operations, ensuring compliance and trust in remote work environments.</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="#" class="ring-focus inline-flex items-center gap-2 rounded-2xl bg-brand-500/20 px-5 py-3 text-sm font-semibold text-brand-100 shadow-glow transition hover:bg-brand-500/30 cta-primary">
+                <span class="msr">shield</span> Security Features
+              </a>
+              <a href="#" class="ring-focus inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm text-white/80 transition hover:bg-white/10 cta-secondary">
+                <span class="msr">verified_user</span> Compliance
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISTRICTS -->
+    <section id="districts" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mb-10 reveal">
+          <h2 class="text-3xl font-bold tracking-tight">Districts</h2>
+          <p class="mt-3 max-w-3xl text-white/70">Over 20 specialized districts coordinate the ecosystem. Replace names as needed.</p>
+        </div>
+        <div class="grid grid-auto-fit gap-4 reveal">
+          <!-- 24+ districts -->
+          <div class="card p-4 text-sm">Atlas — Talent Graph</div>
+          <div class="card p-4 text-sm">Forge — R&amp;D Foundry</div>
+          <div class="card p-4 text-sm">Nexus — Partner Exchange</div>
+          <div class="card p-4 text-sm">Beacon — Learning Hub</div>
+          <div class="card p-4 text-sm">Pulse — Analytics</div>
+          <div class="card p-4 text-sm">Vault — Compliance</div>
+          <div class="card p-4 text-sm">Relay — Automation</div>
+          <div class="card p-4 text-sm">Fabric — DevOps</div>
+          <div class="card p-4 text-sm">Horizon — Strategy</div>
+          <div class="card p-4 text-sm">Helix — AI Lab</div>
+          <div class="card p-4 text-sm">Quanta — Compute Markets</div>
+          <div class="card p-4 text-sm">Lattice — Network Design</div>
+          <div class="card p-4 text-sm">Chronicle — Knowledge Base</div>
+          <div class="card p-4 text-sm">Canvas — Design Systems</div>
+          <div class="card p-4 text-sm">Orbit — Go‑to‑Market</div>
+          <div class="card p-4 text-sm">Meridian — Global Ops</div>
+          <div class="card p-4 text-sm">Outpost — Field Units</div>
+          <div class="card p-4 text-sm">Harbor — Support</div>
+          <div class="card p-4 text-sm">Prism — Media &amp; Story</div>
+          <div class="card p-4 text-sm">Grid — Marketplaces</div>
+          <div class="card p-4 text-sm">Keystone — Identity</div>
+          <div class="card p-4 text-sm">Loom — Workflow</div>
+          <div class="card p-4 text-sm">Catalyst — Innovation</div>
+          <div class="card p-4 text-sm">Flux — Experimentation</div>
+        </div>
+
+        <!-- Visual Boards -->
+        <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6 reveal">
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop" alt="Board 1" />
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1200&auto=format&fit=crop" alt="Board 2" />
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop" alt="Board 3" />
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop" alt="Board 4" />
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop" alt="Board 5" />
+          <img class="card aspect-[4/3] object-cover" src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1200&auto=format&fit=crop" alt="Board 6" />
+        </div>
+      </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="relative py-24">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="card relative overflow-hidden p-8 lg:p-12 reveal">
+          <div class="absolute inset-0 -z-10 bg-gradient-to-br from-brand-500/10 to-transparent"></div>
+          <div class="grid items-center gap-8 lg:grid-cols-3">
+            <div class="lg:col-span-2">
+              <h3 class="text-2xl font-bold">Join the Global Work Revolution</h3>
+              <p class="mt-2 text-white/70">Mainland is a complete operating system for remote work and dynamic careers. Discover unexplored concepts of a new methodology that blends human potential and augmented intelligence.</p>
+            </div>
+            <div class="flex items-center justify-end">
+              <button disabled class="ring-focus inline-flex items-center gap-2 rounded-2xl bg-white/10 px-6 py-3 text-sm font-semibold text-white/80 shadow-glow transition disabled:cursor-not-allowed disabled:opacity-60">
+                <span class="msr">lock</span> Request Invite
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="relative py-24">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="mb-8 reveal">
+          <h2 class="text-3xl font-bold tracking-tight">FAQ</h2>
+          <p class="mt-2 text-white/70">Short, decisive answers for busy leaders and remote pros.</p>
+        </div>
+        <div class="space-y-3">
+          <details class="card group reveal">
+            <summary class="cursor-pointer list-none p-5 text-sm font-semibold">Is Mainland an accelerator or a marketplace?</summary>
+            <div class="border-t border-white/10 p-5 text-sm text-white/70">It is an operating system that orchestrates partners, remote talent, and technology—focusing on outcomes, governance, and durable capabilities.</div>
+          </details>
+          <details class="card group reveal">
+            <summary class="cursor-pointer list-none p-5 text-sm font-semibold">How do partners start?</summary>
+            <div class="border-t border-white/10 p-5 text-sm text-white/70">Through invitation. Partners define goals and constraints; we assemble squads and governance to deliver measured results.</div>
+          </details>
+          <details class="card group reveal">
+            <summary class="cursor-pointer list-none p-5 text-sm font-semibold">How do Loopers grow?</summary>
+            <div class="border-t border-white/10 p-5 text-sm text-white/70">Via Aura‑guided competency maps, Warden‑aligned execution, and Essentia‑supported wellbeing—across real projects and global mentorship.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 py-12">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+        <p class="text-xs text-white/50">© <span id="year"></span> CodeLoop.co — Ecosystem</p>
+        <div class="flex items-center gap-3 text-xs text-white/50">
+          <span class="msr">shield_lock</span>
+          Invite‑only. Confidential program materials.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Sticky nav treatment & current year
+    const nav = document.getElementById('nav');
+    const year = document.getElementById('year');
+    year.textContent = new Date().getFullYear();
+    const onScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop;
+      nav.classList.toggle('opacity-95', y > 8);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add('in');
+      }
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
